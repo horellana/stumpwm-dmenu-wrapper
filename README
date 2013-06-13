@@ -1,0 +1,16 @@
+This is a Stumpwm extension that allows to configure and call dmenu from lisp code.
+
+The following variables are provided
+
+*dmenu-position*
+If set to :bottom, dmenu will appear in the bottom of the screen ...
+
+*dmenu-fast-p*
+If true ,dmenu grabs the keyboard before reading stdin.  This is faster, but will lock up X until stdin reaches end-of-file.
+
+*dmenu-case-sensitive-p*
+*dmenu-font*
+*dmenu-background-color*
+*dmenu-foreground-color*
+*selected-background-color*
+*dmenu-max-vertical-lines*
