@@ -60,9 +60,6 @@
                                                     num-of-windows))))
                 (when win-name (group-focus-window (current-group) (get-window win-name))))))
 
-(defcommand dmenu-kill-proc () ()
-            (run-shell-command (format nil "pkill \"$(pidof ~A)\"" (dmenu :prompt "pkill:"))))
-
 (defcommand dmenu-run () ()
             "Just a simple wrapper to call dmenu_run from lisp"
             (run-shell-command (format nil "dmenu_run ~A" (dmenu-build-cmd-options))))
