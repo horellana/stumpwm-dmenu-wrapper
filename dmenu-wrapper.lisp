@@ -25,11 +25,12 @@
 ;; (defun dmenu-build-list (item-list)
 ;;   (if item-list (format nil "\"~{~A\\n~}\"" item-list) ""))
 
-(defun dmenu (&key item-list prompt vertical-lines)
+(defun dmenu (&key item-list prompt vertical-lines (cmd-options (dmenu-build-cmd-options)))
   (let* ((cmd (format nil
                       "printf ~A | dmenu~A ~@[-p \"~A\"~] ~@[-l \"~A\"~]"
                       (if item-list (format nil "\"~{~A\\n~}\"" item-list) "")
-                      (dmenu-build-cmd-options)
+                      cmd-options
+                       ;; (dmenu-build-cmd-options)
                       prompt
                       vertical-lines))
          (selection (run-shell-command cmd t)))
