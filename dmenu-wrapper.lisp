@@ -44,6 +44,11 @@
             (let ((selection (dmenu :item-list (all-commands) :prompt "Commands:")))
               (when selection (run-commands selection))))
 
+(defcommand dmenu-eval-lisp () ()
+  "Uses dmenu to eval a Lisp expression"
+  (let ((selection (dmenu :prompt "Eval: ")))
+    (when selection (eval (read-from-string selection)))))
+
 (defcommand dmenu-windowlist () ()
             "Uses dmenu to change the visible window"
             (labels ((get-window (window-name)
