@@ -1,8 +1,5 @@
 (in-package #:stumpwm)
 
-;; I did not like the input window that was built in in Stumpwm and i do not know enough clx to "improve" it
-;; so i just quickly wrote this wrapper code to easily (i hope) call and config dmenu from lisp code :) ...
-
 (defvar *dmenu-position* :top)
 (defvar *dmenu-fast-p* t)
 (defvar *dmenu-case-sensitive-p* nil)
@@ -33,8 +30,6 @@
     (when (not (equal selection ""))
       (string-trim '(#\Newline) selection))))
 
-;; Examples of what can be done with (dmenu) ....
-
 (defcommand dmenu-call-command () ()
   "Uses dmenu to call a Stumpwm command"
   (let ((selection (dmenu :item-list (all-commands) :prompt "Commands:")))
@@ -49,18 +44,16 @@
   "Uses dmenu to change the visible window"
   (labels ((get-window (window-name)
              (loop for w in (all-windows) do
-                  (when (equal (window-title w) window-name) (return w)))))
-
-    (let* ((open-windows (mapcar #'window-name (all-windows)))
-           (num-of-windows (length open-windows))
-           (win-name (dmenu
-                      :item-list open-windows
+                  (when (equal (window-title w) window-name) (return w))))
+           (open-windows () (mapcar #'window-name (all-windows)))
+           (num-of-windows () (length (open-windows))))
+    (let ((selection (dmenu
+                      :item-list (open-windows)
                       :prompt "Choose a window:"
-                      :vertical-lines (if (> num-of-windows *dmenu-max-vertical-lines*)
+                      :vertical-lines (if (> (num-of-windows) *dmenu-max-vertical-lines*)
                                           *dmenu-max-vertical-lines*
-                                          num-of-windows))))
-
-      (when win-name (group-focus-window (current-group) (get-window win-name))))))
+                                          (num-of-windows)))))
+      (when selection (focus-window (get-window selection))))))
 
 (defcommand dmenu-run () ()
   "Just a simple wrapper to call dmenu_run from lisp"
