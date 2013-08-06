@@ -30,6 +30,27 @@
     (when (not (equal selection ""))
       (string-trim '(#\Newline) selection))))
 
+(defun dmenu-calc-vertica-lines (menu-length)
+  (if (> menu-length *dmenu-max-vertical-lines*)
+      *dmenu-max-vertical-lines*
+      menu-length))
+
+;; https://gist.github.com/scottjad/5262930
+(defun select-from-menu (screen table &optional prompt (initial-selection 0))
+  (declare (ignore screen initial-selection))
+  (let* ((menu-options (mapcar #'menu-element-name table))
+         (menu-length (length menu-options))
+         (selection-string (dmenu
+                            :item-list menu-options
+                            :prompt prompt
+                            :vertical-lines (dmenu-calc-vertica-lines menu-length)))
+         (selection (find selection-string menu-options
+                          :test (lambda (selection-string item)
+                                  (string-equal selection-string (format nil "~A" item))))))
+    (if (listp (car table))
+        (assoc selection table)
+        selection)))
+
 (defcommand dmenu-call-command () ()
   "Uses dmenu to call a Stumpwm command"
   (let ((selection (dmenu :item-list (all-commands) :prompt "Commands:")))
@@ -50,9 +71,7 @@
     (let ((selection (dmenu
                       :item-list (open-windows)
                       :prompt "Choose a window:"
-                      :vertical-lines (if (> (num-of-windows) *dmenu-max-vertical-lines*)
-                                          *dmenu-max-vertical-lines*
-                                          (num-of-windows)))))
+                      :vertical-lines (dmenu-calc-vertica-lines (num-of-windows)))))
       (when selection (focus-window (get-window selection))))))
 
 (defcommand dmenu-run () ()
