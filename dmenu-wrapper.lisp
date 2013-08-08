@@ -10,13 +10,15 @@
 (defvar *dmenu-max-vertical-lines* 10)
 
 (defun dmenu-build-cmd-options ()
-  (format nil "~@[~A~] ~@[~A~] ~@[~A~] ~@[~A~] ~@[~A~] ~@[~A~] ~@[~A~]"
+  (format nil " ~@[~A~] ~@[~A~] ~@[~A~] ~@[~A~] ~@[~A~] ~@[~A~] ~@[~A~]"
           (when (equal *dmenu-position* :bottom) "-b")
           (when *dmenu-fast-p* "-f")
           (when (not *dmenu-case-sensitive-p*) "-i")
           (when *dmenu-font* (format nil "-fn ~A" *dmenu-font*))
           (when *dmenu-background-color* (format nil "-nb ~A" *dmenu-background-color*))
           (when *dmenu-foreground-color* (format nil "-nf ~A" *dmenu-foreground-color*))
+
+          
           (when *dmenu-selected-background-color* (format nil "-sb ~A" *dmenu-selected-background-color*))))
 
 (defun dmenu (&key item-list prompt vertical-lines (cmd-options (dmenu-build-cmd-options)))
