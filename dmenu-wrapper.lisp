@@ -17,8 +17,6 @@
           (when *dmenu-font* (format nil "-fn ~A" *dmenu-font*))
           (when *dmenu-background-color* (format nil "-nb ~A" *dmenu-background-color*))
           (when *dmenu-foreground-color* (format nil "-nf ~A" *dmenu-foreground-color*))
-
-          
           (when *dmenu-selected-background-color* (format nil "-sb ~A" *dmenu-selected-background-color*))))
 
 (defun dmenu (&key item-list prompt vertical-lines (cmd-options (dmenu-build-cmd-options)))
@@ -67,13 +65,13 @@
   "Uses dmenu to change the visible window"
   (labels ((get-window (window-name)
              (loop for w in (all-windows) do
-                  (when (equal (window-title w) window-name) (return w))))
-           (open-windows () (mapcar #'window-name (all-windows)))
-           (num-of-windows () (length (open-windows))))
-    (let ((selection (dmenu
-                      :item-list (open-windows)
-                      :prompt "Choose a window:"
-                      :vertical-lines (dmenu-calc-vertica-lines (num-of-windows)))))
+                  (when (equal (window-title w) window-name) (return w)))))
+    (let* ((open-windows (mapcar #'window-name (all-windows)))
+           (num-of-windows (length open-windows))
+           (selection (dmenu
+                       :item-list open-windows
+                       :prompt "Choose a window:"
+                       :vertical-lines (dmenu-calc-vertica-lines num-of-windows))))
       (when selection (focus-window (get-window selection))))))
 
 (defcommand dmenu-run () ()
